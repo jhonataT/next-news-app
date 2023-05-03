@@ -1,7 +1,15 @@
 import { CustomHead } from '@/components/Head';
-import styles from './home.module.scss';
+import { SubscribeButton } from '@/components/SubscribeButton';
+import { GetStaticProps } from 'next';
+import { stripe } from '@/services/stripe';
+import styles from './home.module.scss'; 
 
-const Home = () => {
+interface HomeProps {
+  priceId: string,
+  amount: number,
+};
+
+const Home = (props: HomeProps) => {
   return (
     <>
       <CustomHead title="Home | NewsApp"/>
@@ -15,8 +23,9 @@ const Home = () => {
           </h1>
           <p>
             Get access to all the publications <br/>
-            <span>for $9.90 month</span>
+            <span>for {props.amount} month</span>
           </p>
+          <SubscribeButton priceId={props.priceId}/>
         </section>
         <img
           src="/images/avatar.svg"
@@ -28,3 +37,20 @@ const Home = () => {
 }
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const price = await stripe.prices.retrieve('price_1N3cOxDqrh9Dty7ibH2SnvaQ');
+
+  const product = {
+    priceId: price.id,
+    amount: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format((price.unit_amount || 0) / 100),
+  };
+
+  return {
+    props: {...product},
+    revalidate: 60 * 60 * 24 // 24h
+  }
+}
