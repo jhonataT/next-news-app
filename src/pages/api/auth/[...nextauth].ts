@@ -1,5 +1,15 @@
+import { query as q } from 'faunadb';
+import { Account, Profile, User } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
+import { fauna } from '@/services/fauna';
 import NextAuth from 'next-auth/next';
 import GitHubProvider  from 'next-auth/providers/github';
+
+interface SignInProps {
+    user: User | AdapterUser;
+    account: Account | null;
+    profile?: Profile | undefined;
+};
 
 export const authOptions = {
     providers: [
@@ -11,7 +21,28 @@ export const authOptions = {
                 params: { scope: "read:user" },
             },
         })
-    ]
+    ],
+    // jwt: {
+    //     signingKey: process.env.SIGNING_KEY
+    // },
+    callbacks: {
+        async signIn({ user, account, profile }: SignInProps ) {
+            const { email } = user;
+
+            try {
+                await fauna.query(
+                    q.Create(
+                        q.Collection('users'),
+                        { data: { email } }
+                    )
+                )
+
+                return true;
+            } catch {
+                return false
+            }
+        }
+    }
 }
 
 export default NextAuth(authOptions);
