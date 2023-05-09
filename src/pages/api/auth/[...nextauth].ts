@@ -36,7 +36,7 @@ export const authOptions = {
                             q.Exists(
                                 q.Match(
                                     q.Index('user_by_email'),
-                                    q.Casefold(user.email)
+                                    q.Casefold(user.email as string)
                                 )
                             )
                         ),
@@ -47,7 +47,7 @@ export const authOptions = {
                         q.Get( // select
                             q.Match(
                                 q.Index('user_by_email'),
-                                q.Casefold(user.email)
+                                q.Casefold(user.email as string)
                             )
                         )
                     ),
