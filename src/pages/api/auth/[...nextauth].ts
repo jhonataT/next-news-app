@@ -1,5 +1,5 @@
 import { query as q } from 'faunadb';
-import { Account, Profile, User } from 'next-auth';
+import { Account, NextAuthOptions, Profile, User } from 'next-auth';
 import { AdapterUser } from 'next-auth/adapters';
 import { fauna } from '@/services/fauna';
 import NextAuth from 'next-auth/next';
@@ -11,7 +11,7 @@ interface SignInProps {
     profile?: Profile | undefined;
 };
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
         GitHubProvider({
             clientId: process.env.GITHUB_CLIENT_ID as string,
@@ -26,7 +26,7 @@ export const authOptions = {
     //     signingKey: process.env.SIGNING_KEY
     // },
     callbacks: {
-        async signIn({ user, account, profile }: SignInProps ) {
+        async signIn({ user }: SignInProps ) {
             const { email } = user;
 
             try {

@@ -9,10 +9,10 @@ interface SubscribeButtonProps {
 }
 
 export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
-    const { status } = useSession();
+    const { status, data } = useSession();
     
     const handleSubscribe = async () => {
-        if(status !== 'authenticated') {
+        if(!data?.user || status !== 'authenticated') {
             customToast('Login is required!', 'info')
             signIn('github');
             return;
@@ -20,6 +20,8 @@ export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
 
         try {
             const response = await api.post('/subscribe')
+
+            console.log(response);
 
             const { sessionId } = response.data;
 

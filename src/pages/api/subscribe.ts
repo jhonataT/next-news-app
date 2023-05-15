@@ -1,8 +1,10 @@
 import { stripe } from "@/services/stripe";
-import { getSession } from "next-auth/react"; 
+import { getServerSession  } from "next-auth"; 
 import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "./auth/[...nextauth]";
 import { fauna } from "@/services/fauna";
 import { query as q } from "faunadb";
+import { getSession } from "next-auth/react";
 
 type User = {
     ref: {
@@ -16,6 +18,15 @@ type User = {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if(req.method === 'POST') {
         const session = await getSession({ req });
+
+        // res.send(JSON.stringify(session, null, 2))
+        // return;
+
+        console.log("SESSION", session)
+
+        if(!session || !session.user) {
+            return res.status(500).end('Session not found.');
+        }
 
         const user = await fauna.query<User>(
             q.Get(
