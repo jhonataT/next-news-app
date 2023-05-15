@@ -1,8 +1,8 @@
 import { signIn, useSession } from 'next-auth/react';
-import styles from './styles.module.scss';
-import { api } from '@/services/api';
 import { getStripeJs } from '@/services/stripe-js';
+import { api } from '@/services/api';
 import { customToast } from '../Toast';
+import styles from './styles.module.scss';
 
 interface SubscribeButtonProps {
     priceId: string;
@@ -15,7 +15,6 @@ export const SubscribeButton = ({ priceId }: SubscribeButtonProps) => {
         if(!data?.user || status !== 'authenticated') {
             customToast('Login is required!', 'info')
             signIn('github');
-            return;
         }
 
         try {

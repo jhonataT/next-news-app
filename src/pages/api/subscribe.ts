@@ -1,10 +1,8 @@
-import { stripe } from "@/services/stripe";
-import { getServerSession  } from "next-auth"; 
 import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from "./auth/[...nextauth]";
-import { fauna } from "@/services/fauna";
-import { query as q } from "faunadb";
 import { getSession } from "next-auth/react";
+import { query as q } from "faunadb";
+import { fauna } from "@/services/fauna";
+import { stripe } from "@/services/stripe";
 
 type User = {
     ref: {
@@ -18,11 +16,6 @@ type User = {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     if(req.method === 'POST') {
         const session = await getSession({ req });
-
-        // res.send(JSON.stringify(session, null, 2))
-        // return;
-
-        console.log("SESSION", session)
 
         if(!session || !session.user) {
             return res.status(500).end('Session not found.');
