@@ -18,7 +18,7 @@ const Home = (props: HomeProps) => {
           <span>👏 Hey, welcome</span>
           <h1>
             News about the
-            <span> React </span>
+            <span> NextJS </span>
             world.
           </h1>
           <p>
