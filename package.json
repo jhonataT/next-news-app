@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prismicio/client": "^7.0.1",
+    "@prismicio/next": "^1.2.1",
     "@stripe/stripe-js": "^1.52.1",
     "axios": "^1.4.0",
     "eslint": "8.39.0",

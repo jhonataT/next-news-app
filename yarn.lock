@@ -155,6 +155,34 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
+"@prismicio/client@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@prismicio/client/-/client-7.0.1.tgz#5cc9693a81c52c3e71721271ca2583cbb7004445"
+  integrity sha512-f4SDcDwVB2T73QKJJtzXd8LsfvDgIqOQNhC78bwsKLb1BjfPZNucsyIcRI9jGZdGxcU7lA+HStkYHw6z98ofKQ==
+  dependencies:
+    "@prismicio/richtext" "^2.1.5"
+    imgix-url-builder "^0.0.3"
+
+"@prismicio/next@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@prismicio/next/-/next-1.2.1.tgz#e998ec8dec980b0f4171b79de4c654899a3b8b6f"
+  integrity sha512-GXTB//RG3BfFw3syZioN0FVhs6EEiPyuPwpze5AqTJktietP08D4pXjPntcN2bAluHjE5nxuqkUWEl9DubpJWg==
+  dependencies:
+    imgix-url-builder "^0.0.3"
+    mri "^1.2.0"
+
+"@prismicio/richtext@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@prismicio/richtext/-/richtext-2.1.5.tgz#8a433939765bead2a521150fb15af0b49c6af421"
+  integrity sha512-Sf6iCsciPmfK3uQeFmeY9RTRSuhrCVzyU39OkiJ1VJn8O0531pKapGoWS+5WGxouJtE5+jGqV8L+L2mKP7NkXQ==
+  dependencies:
+    "@prismicio/types" "^0.2.7"
+
+"@prismicio/types@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@prismicio/types/-/types-0.2.7.tgz#4091136fa198b366d3fefb49d1dd31d336522540"
+  integrity sha512-xHPBWg+lPcl8U97VB/2oYK3MJlQoVPZq91hbeQO8WRyvq+zgpNST3xFOTk8SkQpgoH6wd50AxGZELvPrpojajQ==
+
 "@rushstack/eslint-patch@^1.1.3":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz#8be36a1f66f3265389e90b5f9c9962146758f728"
@@ -1287,6 +1315,11 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
+imgix-url-builder@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/imgix-url-builder/-/imgix-url-builder-0.0.3.tgz#9f386de64cdd1363d352a7f6313fd7dacd8fb282"
+  integrity sha512-8Oc2Cn4+jF06sEfJcVPlWYfD2F6RjrwIMbk1xEzux8unoB5LsvFc/GL1BQ47HPaeE12ReX2nMUcjUslGYWLxHA==
+
 immutable@^4.0.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.3.0.tgz#eb1738f14ffb39fd068b1dbe1296117484dd34be"
@@ -1645,6 +1678,11 @@ minimist@^1.2.0, minimist@^1.2.6:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
+
+mri@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mri/-/mri-1.2.0.tgz#6721480fec2a11a4889861115a48b6cbe7cc8f0b"
+  integrity sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==
 
 ms@2.1.2:
   version "2.1.2"
