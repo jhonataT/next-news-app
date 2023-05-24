@@ -1,41 +1,45 @@
+import * as prismicH from '@prismicio/helpers'
 import { CustomHead } from '@/components/Head';
+import { getPrismicClient } from '@/services/prismic';
+import { GetStaticProps } from 'next/types';
 import styles from './styles.module.scss';
 
-const PostScreen = () => {
+interface Post {
+    uid: string;
+    title: string;
+    summary: string;
+    updatedAt: string;
+    image?: {
+        dimensions: { width: number, height: number };
+        alt: string;
+        copyright?: string | null;
+        url: string;
+    };
+    content?: string;
+};
+
+interface PostScreenProps {
+    posts: Post[];
+};
+
+const PostScreen = ({ posts }: PostScreenProps) => {
     return <>
         <CustomHead title='Posts | NextNews' />
         <main className={styles.container}>
             <div className={styles.content}>
-                <a href='#'>
-                    <time>May 24, 2023</time>
-                    <strong>
-                        Introduction to React Hooks: Enhancing Functionality and State Management
-                    </strong>
-                    <p>
-                        React, a widely popular JavaScript library for building user interfaces, introduced Hooks in version 16.8 as a way to add state and other features to functional components. Before Hooks, developers had to use class components to access state and lifecycle methods.
-                        With Hooks, React functional components gained the ability to manage state, use lifecycle methods, and incorporate other advanced features.
-                    </p>
-                </a>
-                <a href='#'>
-                    <time>May 24, 2023</time>
-                    <strong>
-                        Introduction to React Hooks: Enhancing Functionality and State Management
-                    </strong>
-                    <p>
-                        React, a widely popular JavaScript library for building user interfaces, introduced Hooks in version 16.8 as a way to add state and other features to functional components. Before Hooks, developers had to use class components to access state and lifecycle methods.
-                        With Hooks, React functional components gained the ability to manage state, use lifecycle methods, and incorporate other advanced features.
-                    </p>
-                </a>
-                <a href='#'>
-                    <time>May 24, 2023</time>
-                    <strong>
-                        Introduction to React Hooks: Enhancing Functionality and State Management
-                    </strong>
-                    <p>
-                        React, a widely popular JavaScript library for building user interfaces, introduced Hooks in version 16.8 as a way to add state and other features to functional components. Before Hooks, developers had to use class components to access state and lifecycle methods.
-                        With Hooks, React functional components gained the ability to manage state, use lifecycle methods, and incorporate other advanced features.
-                    </p>
-                </a>
+                {
+                    Array.isArray(posts) && posts.map((post: Post) => (
+                        <a href='#' key={post.uid}>
+                            <time>{post.updatedAt}</time>
+                            <strong>
+                                {post.title}
+                            </strong>
+                            <p>
+                                {post.summary}
+                            </p>
+                        </a>
+                    ))
+                }
             </div>
         </main>
     
@@ -43,3 +47,38 @@ const PostScreen = () => {
 }
 
 export default PostScreen;
+
+export const getStaticProps: GetStaticProps = async () => {
+    const prismic = getPrismicClient();
+
+    const response = await prismic.getAllByType('article', {
+        fetch: ['title', 'publishDate', 'text'],
+        pageSize: 100
+    });
+
+    let dataToResponse: Post[] = [];
+
+    if(Array.isArray(response)) {
+        dataToResponse = response.map((post) => ({
+            uid: post?.uid,
+            title: prismicH.asText(post.data.title),
+            summary: post.data.slices[0].primary.text.find((content: any) => content.type === 'paragraph')?.text ?? '',
+            updatedAt: new Date(post.last_publication_date).toLocaleDateString('en-us', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }),
+            image: post?.data?.featuredImage,
+            content: post?.data?.slices[0]?.primary?.text[0]
+        })) as Post[]
+    }
+
+    console.log(JSON.stringify(dataToResponse, null, 2))
+
+    return {
+        props: {
+            posts: dataToResponse
+        },
+        revalidate: 60 * 60 * 24 // 24h
+    }
+}
