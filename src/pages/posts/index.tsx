@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import * as prismicH from '@prismicio/helpers'
 import { CustomHead } from '@/components/Head';
 import { getPrismicClient } from '@/services/prismic';
@@ -18,18 +19,18 @@ interface Post {
     content?: string;
 };
 
-interface PostScreenProps {
+interface PostListScreenProps {
     posts: Post[];
 };
 
-const PostScreen = ({ posts }: PostScreenProps) => {
+const PostListScreen = ({ posts }: PostListScreenProps) => {
     return <>
         <CustomHead title='Posts | NextNews' />
         <main className={styles.container}>
             <div className={styles.content}>
                 {
                     Array.isArray(posts) && posts.map((post: Post) => (
-                        <a href='#' key={post.uid}>
+                        <Link href={`/posts/${post.uid}`} key={post.uid}>
                             <time>{post.updatedAt}</time>
                             <strong>
                                 {post.title}
@@ -37,7 +38,7 @@ const PostScreen = ({ posts }: PostScreenProps) => {
                             <p>
                                 {post.summary}
                             </p>
-                        </a>
+                        </Link>
                     ))
                 }
             </div>
@@ -46,7 +47,7 @@ const PostScreen = ({ posts }: PostScreenProps) => {
     </>
 }
 
-export default PostScreen;
+export default PostListScreen;
 
 export const getStaticProps: GetStaticProps = async () => {
     const prismic = getPrismicClient();
@@ -72,8 +73,6 @@ export const getStaticProps: GetStaticProps = async () => {
             content: post?.data?.slices[0]?.primary?.text[0]
         })) as Post[]
     }
-
-    console.log(JSON.stringify(dataToResponse, null, 2))
 
     return {
         props: {

@@ -14,7 +14,6 @@ export const Header = () => {
                 />
                 <ActiveLink
                     to='/posts'
-                    prefetch
                     label='Posts'
                     activeClassName={styles.active}
                 />
