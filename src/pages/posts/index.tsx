@@ -52,7 +52,7 @@ export default PostListScreen;
 export const getStaticProps: GetStaticProps = async () => {
     const prismic = getPrismicClient();
 
-    const response = await prismic.getAllByType('article', {
+    const response = await prismic.getAllByType('post', {
         fetch: ['title', 'publishDate', 'text'],
         pageSize: 100
     });
@@ -63,14 +63,13 @@ export const getStaticProps: GetStaticProps = async () => {
         dataToResponse = response.map((post) => ({
             uid: post?.uid,
             title: prismicH.asText(post.data.title),
-            summary: post.data.slices[0].primary.text.find((content: any) => content.type === 'paragraph')?.text ?? '',
+            summary: post.data.content.find((content: any) => content.type === 'paragraph')?.text ?? '',
             updatedAt: new Date(post.last_publication_date).toLocaleDateString('en-us', {
                 day: '2-digit',
                 month: 'long',
                 year: 'numeric'
             }),
-            image: post?.data?.featuredImage,
-            content: post?.data?.slices[0]?.primary?.text[0]
+            content: prismicH.asHTML(post.data.content)
         })) as Post[]
     }
 

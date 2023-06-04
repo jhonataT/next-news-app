@@ -1,5 +1,0 @@
-{
-  "repositoryName": "newsappjt",
-  "adapter": "@slicemachine/adapter-next",
-  "libraries": ["./slices"]
-}

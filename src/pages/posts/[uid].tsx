@@ -47,13 +47,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
 
     const prismic = getPrismicClient();
 
-    const response = await prismic.getByUID('article', `${params?.uid as string}` )
+    const response = await prismic.getByUID('post', `${params?.uid as string}` )
     let post: Post | {} = {};
 
     console.log(response.data)
 
-    // prismicH.asHTML(response.data.slices)
-    
     post = {
         uid: response?.uid,
         title: prismicH.asText(response.data.title),
@@ -62,25 +60,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
             month: 'long',
             year: 'numeric'
         }),
-        image: response?.data?.featuredImage,
-        content: response.data.slices.reduce((previousSlices: string, slice: any) => {
-            console.log({
-                slice
-            })
-            switch (slice.slice_type) {
-              case 'image_slice':
-                return (
-                  previousSlices +
-                  `<img src="${slice.primary.example_image.url}" alt="${slice.primary.example_image.alt}" />`
-                )
-          
-              case 'text_slice':
-                return previousSlices + prismicH.asHTML(slice.primary.sample_text)
-          
-              default:
-                return ''
-            }
-          }, '')
+        content: prismicH.asHTML(response.data.content)
     }
 
     return { props: {post} };
