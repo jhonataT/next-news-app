@@ -22,10 +22,44 @@ export const authOptions: NextAuthOptions = {
             },
         })
     ],
-    // jwt: {
-    //     signingKey: process.env.SIGNING_KEY
-    // },
     callbacks: {
+        async session({ session }): Promise<any> {
+
+            try {
+                const userActiveSubscription = await fauna.query(
+                    q.Get(
+                        q.Intersection([
+                            q.Match(
+                                q.Index('subscription_by_user_ref'),
+                                q.Select(
+                                    'ref',
+                                    q.Get(
+                                        q.Match(
+                                            q.Index('user_by_email'),
+                                            q.Casefold(session.user?.email as string)
+                                        )
+                                    )
+                                )
+                            ),
+                            q.Match(
+                                q.Index('subscription_by_status'),
+                                'active'
+                            )
+                        ])
+                    )
+                )
+
+                return {
+                    ...session,
+                    activeSubscription: userActiveSubscription
+                }
+            } catch(error) {
+                return {
+                    ...session,
+                    activeSubscription: null
+                } 
+            }
+        },
         async signIn({ user }: SignInProps ) {
             const { email } = user;
 
@@ -44,7 +78,7 @@ export const authOptions: NextAuthOptions = {
                             q.Collection('users'),
                             { data: { email } }
                         ),
-                        q.Get( // select
+                        q.Get(
                             q.Match(
                                 q.Index('user_by_email'),
                                 q.Casefold(user.email as string)

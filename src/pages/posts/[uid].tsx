@@ -13,13 +13,11 @@ interface Post {
     content?: string;
 };
 
-interface PostSreen {
+interface PostSreenProps {
     post: Post;
 };
 
-const PostScreen = ({ post }: PostSreen) => {
-    console.log("post", {post})
-
+const PostScreen = ({ post }: PostSreenProps) => {
     return <>
         <CustomHead title={`${post.title} | NextNews`}/>
         <main className={styles.container}>
@@ -39,18 +37,23 @@ export default PostScreen;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
     const session = await getSession({ req });
-    console.log("params", { params: params?.uid, session })
 
-    // if(!session || !session?.user) {
-    //     return;
-    // }
+    console.log("session", session);
+
+    if(!session?.activeSubscription) {
+        console.log("AAAA")
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
 
     const prismic = getPrismicClient();
 
     const response = await prismic.getByUID('post', `${params?.uid as string}` )
     let post: Post | {} = {};
-
-    console.log(response.data)
 
     post = {
         uid: response?.uid,

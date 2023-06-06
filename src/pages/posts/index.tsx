@@ -30,7 +30,7 @@ const PostListScreen = ({ posts }: PostListScreenProps) => {
             <div className={styles.content}>
                 {
                     Array.isArray(posts) && posts.map((post: Post) => (
-                        <Link href={`/posts/${post.uid}`} key={post.uid}>
+                        <Link href={`/posts/preview/${post.uid}`} key={post.uid}>
                             <time>{post.updatedAt}</time>
                             <strong>
                                 {post.title}
